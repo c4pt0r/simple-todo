@@ -6,15 +6,21 @@ import { Footer, Header, TodoItem } from './components'
 import useTodos from './useTodos'
 
 function App() {
-  const { todos } = useTodos()
+  const { todos, onCreate, onRemove, onUpdate, onToggle } = useTodos()
 
   return (
     <div className="todo-app">
-      <Header />
+      <Header onCreate={onCreate} />
       <div className="todo-main">
         <div className="todo-list">
           {todos.map((t) => (
-            <TodoItem key={t.id} todo={t} />
+            <TodoItem
+              key={t.id || t.clientID}
+              todo={t}
+              onRemove={onRemove}
+              onUpdate={onUpdate}
+              onToggle={onToggle}
+            />
           ))}
         </div>
       </div>

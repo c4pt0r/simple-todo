@@ -24,3 +24,10 @@ Then, you'll get the initial project and the initial git commitment.
 - Create the model for the tasks(using react hooks)
 - Fill the mock data for the model
 - Render the tasks in the **main** area of the App
+
+### 4. Add/Remove/Update/Toggle
+
+- Add task
+- Remove task
+- Edit task
+- Toggle task

@@ -10,7 +10,7 @@ body {
 	color: #4d4d4d;
 }
 
-button {
+button, input {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -120,7 +120,6 @@ input::-webkit-input-placeholder {
 
 .todo-item .todo-item--toggle {
   flex-shrink: 0;
-  cursor: pointer;
   width: 48px;
   height: 56px;
   background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
@@ -139,6 +138,11 @@ input::-webkit-input-placeholder {
   margin: 0;
   appearance: none;
   cursor: pointer;
+}
+
+.todo-item .todo-item--toggle .todo-item--toggle-input[disabled] {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 
 .todo-item .todo-item--content {
@@ -187,4 +191,23 @@ input::-webkit-input-placeholder {
 
 .todo-item:hover .todo-item--remove {
   opacity: 1;
+}
+
+.todo-item .todo-item--remove[disabled] {
+  opacity: 0;
+  cursor: default;
+}
+
+.todo-item .todo-item--editing-input {
+  flex-grow: 1;
+  font-size: 24px;
+	line-height: 54px;
+  height: 56px;
+	border: 0;
+	border: none;
+  outline: none;
+	box-sizing: border-box;
+  padding: 0 12px;
+  font-weight: 300;
+  border-bottom: 2px solid rgba(175, 47, 47, 0.20);
 }
