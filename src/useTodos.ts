@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { StatusFilter, getTodos, delTodo, patchTodo, postTodo } from './api'
 
 
 let autoClientID = 1;
@@ -15,20 +16,6 @@ export interface TodoIDs {
   clientID?: number
 }
 
-// TEMP: mock todos
-const mockTodos = [
-  {
-    id: 'todo-1',
-    title: 'Bug Fix: balabala',
-    completed: false,
-  },
-  {
-    id: 'todo-2',
-    title: 'Create something with long content xxxxxyyyyyyzzzzzzzhhhhhhhh, it will break down the style?',
-    completed: true,
-  },
-];
-
 function findTodoById(target: TodoIDs, todos: Todo[]) {
   let index = -1
   if (target.id) {
@@ -40,9 +27,18 @@ function findTodoById(target: TodoIDs, todos: Todo[]) {
 }
 
 function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>(mockTodos)
+  const [todos, setTodos] = useState<Todo[]>([])
 
-  const onCreate = useCallback((title: string) => {
+  const fetchTodos = useCallback(async (limit = 100, statusFilter = StatusFilter.All) => {
+    const data = await getTodos({ limit, statusFilter })
+    setTodos(data || [])
+  }, [])
+
+  useEffect(() => {
+    fetchTodos()
+  }, []) // eslint-disable-line
+
+  const onCreate = useCallback(async (title: string) => {
     const thisClientId = ++autoClientID
     setTodos([
       {
@@ -53,8 +49,17 @@ function useTodos() {
       },
       ...todos,
     ])
-    // TODO: request api to insert
-    // update todo (id) with response
+    const todoEnity = await postTodo({ title })
+    if (todoEnity) {
+      const { id } = todoEnity as Todo
+      const todoItemIndex = todos.findIndex(t => t.clientID === thisClientId)
+      if (todoItemIndex >= 0) {
+        const newTodos = [...todos]
+        newTodos[todoItemIndex].id = id
+        setTodos(newTodos)
+      }
+    }
+    // TODO: if error, remove the task
   }, [todos]);
 
   const onRemove = useCallback((target: TodoIDs) => {
@@ -67,12 +72,13 @@ function useTodos() {
       setTodos(newTodos)
 
       if (deletedTodo[0] && deletedTodo[0].id) {
-        // TODO: request api to remove
+        delTodo({ id: deletedTodo[0].id })
+        // TODO: if error, recover the task
       }
     }
   }, [todos])
 
-  const onUpdate = useCallback((target: TodoIDs & { title: string }) => {
+  const onUpdate = useCallback(async (target: TodoIDs & { title: string }) => {
     const index = findTodoById(target, todos)
     if (index >= 0) {
       const newTodos = [...todos]
@@ -81,7 +87,8 @@ function useTodos() {
       setTodos(newTodos)
 
       if (newTodos[index].id) {
-        // TODO: request api to update title
+        patchTodo({ id: newTodos[index].id, title: target.title })
+        // TODO: if error, recover the task title
       }
     }
   }, [todos])
@@ -90,12 +97,14 @@ function useTodos() {
     const index = findTodoById(target, todos)
     if (index >= 0) {
       const newTodos = [...todos]
-      newTodos[index].completed = !newTodos[index].completed
+      const newCompleted = !newTodos[index].completed
+      newTodos[index].completed = newCompleted
 
       setTodos(newTodos)
 
       if (newTodos[index].id) {
-        // TODO: request api to update status
+        patchTodo({ id: newTodos[index].id, completed: newCompleted })
+        // TODO: if error, recover the task status
       }
     }
   }, [todos])

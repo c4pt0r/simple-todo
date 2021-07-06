@@ -1,6 +1,8 @@
+import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
 import React from 'react'
+import { ToastContainer } from 'react-toastify'
 
 import { Footer, Header, TodoItem } from './components'
 import useTodos from './useTodos'
@@ -25,6 +27,7 @@ function App() {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   )
 }
