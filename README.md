@@ -39,6 +39,12 @@ Then, you'll get the initial project and the initial git commitment.
 - Use `react-toastify` for toast
 - Add api for add/remove/update/toggle task
 
+### 6. Count & Filter
+
+- Add task count
+- Add status filter
+- Add a transparent mask onto the app (ban interaction) when the list is loading
+
 ## API SPEC
 
 ### Response Convention

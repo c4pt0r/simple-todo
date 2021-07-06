@@ -28,15 +28,29 @@ function findTodoById(target: TodoIDs, todos: Todo[]) {
 
 function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([])
+  const [statusFilter, setStatusFilter] = useState(StatusFilter.All)
+  const [isLoadingData, setIsLoadingData] = useState(true)
 
-  const fetchTodos = useCallback(async (limit = 100, statusFilter = StatusFilter.All) => {
-    const data = await getTodos({ limit, statusFilter })
-    setTodos(data || [])
+  const fetchTodos = useCallback(async (statusFilter = StatusFilter.All, limit = 100) => {
+    setIsLoadingData(true)
+    try {
+      const data = await getTodos({ limit, statusFilter })
+      setTodos(data || [])
+    } finally {
+      setIsLoadingData(false)
+    }
   }, [])
 
   useEffect(() => {
-    fetchTodos()
+    fetchTodos(statusFilter)
   }, []) // eslint-disable-line
+
+  const onStatusFilterChange = useCallback((val: StatusFilter) => {
+    if (statusFilter !== val) {
+      setStatusFilter(val)
+      fetchTodos(val)
+    }
+  }, [statusFilter, fetchTodos])
 
   const onCreate = useCallback(async (title: string) => {
     const thisClientId = ++autoClientID
@@ -115,6 +129,9 @@ function useTodos() {
     onRemove,
     onUpdate,
     onToggle,
+    onStatusFilterChange,
+    isLoadingData,
+    statusFilter,
   }
 }
 
