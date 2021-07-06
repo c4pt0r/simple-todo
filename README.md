@@ -18,3 +18,9 @@ Then, you'll get the initial project and the initial git commitment.
 - Modify the `src/App.tsx` to render the **header**, **main** and **footer**
 - Implement **header** and **footer**
 - Remember modify the corresponding style. **To simplify the style, we write the style of the whole app into the `APP.css` file.**
+
+### 3. Render tasks
+
+- Create the model for the tasks(using react hooks)
+- Fill the mock data for the model
+- Render the tasks in the **main** area of the App
