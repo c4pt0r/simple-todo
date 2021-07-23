@@ -31,7 +31,7 @@ interface GetTodosParams {
   statusFilter?: StatusFilter
 }
 export async function getTodos(params: GetTodosParams) {
-  /** mock start */
+  /** mock start 
   if (params.statusFilter === StatusFilter.All) {
     return [...mockUncompletedTasks, ...mockCompletedTasks]
   } else if (params.statusFilter === StatusFilter.UNCOMPLETED) {
@@ -39,15 +39,16 @@ export async function getTodos(params: GetTodosParams) {
   } else if (params.statusFilter === StatusFilter.COMPLETED) {
     return [...mockCompletedTasks]
   }
+  */
   /** mock end */
 
   // TODO: uncomment these lines to use the real data from the api
-  // const { d } = await request({
-  //   url: '/api/todos',
-  //   method: 'GET',
-  //   params,
-  // })
-  // return d;
+  const { d } = await request({
+    url: '/api/todos',
+    method: 'GET',
+    params,
+  })
+  return d;
 }
 
 interface PostTodoData {
